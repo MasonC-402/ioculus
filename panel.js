@@ -168,8 +168,9 @@ function showAnalysisStart(value, type) {
   header.innerHTML = `
     <span class="analysis-type-label">${esc(type)}</span>
     <span class="analysis-value">${esc(value)}</span>
-    <button class="copy-btn" onclick="copyToClip('${esc(value)}')">Copy</button>
+    <button class="copy-btn">Copy</button>
   `;
+  header.querySelector('.copy-btn').addEventListener('click', () => copyToClip(value));
   container.appendChild(header);
 
   // Skeleton cards for each expected source
@@ -1035,5 +1036,3 @@ function copyToClip(text) {
   });
 }
 
-// Make copyToClip available globally (for inline onclick)
-window.copyToClip = copyToClip;

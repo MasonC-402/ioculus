@@ -99,6 +99,7 @@ ioculus/
 ├── panel.css              # Side panel styles (dark theme)
 ├── panel.js               # Side panel logic: rendering, IOC UI, network UI, history
 ├── settings.html          # Options page: API key management
+├── settings.js            # Options page logic
 └── icons/
     ├── icon16.png
     ├── icon32.png

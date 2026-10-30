@@ -203,7 +203,7 @@
           </div>
           <div class="key-row">
             <input type="password" id="key-vt" placeholder="e.g. a1b2c3d4e5f6..." autocomplete="off" spellcheck="false" />
-            <button class="toggle-visibility" onclick="toggleVis('key-vt')">👁</button>
+            <button class="toggle-visibility" data-target="key-vt">👁</button>
           </div>
         </div>
 
@@ -218,7 +218,7 @@
           </div>
           <div class="key-row">
             <input type="password" id="key-abuseipdb" placeholder="e.g. a1b2c3d4e5f6..." autocomplete="off" spellcheck="false" />
-            <button class="toggle-visibility" onclick="toggleVis('key-abuseipdb')">👁</button>
+            <button class="toggle-visibility" data-target="key-abuseipdb">👁</button>
           </div>
         </div>
 
@@ -233,12 +233,12 @@
           </div>
           <div class="key-row">
             <input type="password" id="key-shodan" placeholder="e.g. a1b2c3d4e5f6..." autocomplete="off" spellcheck="false" />
-            <button class="toggle-visibility" onclick="toggleVis('key-shodan')">👁</button>
+            <button class="toggle-visibility" data-target="key-shodan">👁</button>
           </div>
         </div>
 
         <div class="save-bar">
-          <button class="primary" onclick="saveKeys()">Save API Keys</button>
+          <button class="primary" id="btn-save">Save API Keys</button>
           <span class="status-msg" id="save-status"></span>
         </div>
       </div>
@@ -268,66 +268,12 @@
         <div class="field">
           <label>Clear All Stored Data</label>
           <div class="field-desc">Removes API keys, history, and network cache.</div>
-          <button class="danger" onclick="clearAll()">Clear All Data</button>
+          <button class="danger" id="btn-clear-all">Clear All Data</button>
         </div>
       </div>
     </div>
   </main>
 
-  <script>
-    // ── Load saved keys ──────────────────────────────────────────────────────
-    chrome.storage.sync.get(['virusTotalKey','abuseIPDBKey','shodanKey'], (data) => {
-      if (data.virusTotalKey) document.getElementById('key-vt').value         = data.virusTotalKey;
-      if (data.abuseIPDBKey)  document.getElementById('key-abuseipdb').value  = data.abuseIPDBKey;
-      if (data.shodanKey)     document.getElementById('key-shodan').value     = data.shodanKey;
-    });
-
-    // ── Save keys ────────────────────────────────────────────────────────────
-    function saveKeys() {
-      const vtKey     = document.getElementById('key-vt').value.trim();
-      const abuseKey  = document.getElementById('key-abuseipdb').value.trim();
-      const shodanKey = document.getElementById('key-shodan').value.trim();
-
-      chrome.storage.sync.set({
-        virusTotalKey: vtKey,
-        abuseIPDBKey:  abuseKey,
-        shodanKey:     shodanKey,
-      }, () => {
-        const msg = document.getElementById('save-status');
-        if (chrome.runtime.lastError) {
-          msg.textContent = '✕ Error: ' + chrome.runtime.lastError.message;
-          msg.className = 'status-msg error';
-        } else {
-          msg.textContent = '✓ Saved';
-          msg.className = 'status-msg';
-        }
-        msg.style.display = 'inline';
-        setTimeout(() => msg.style.display = 'none', 3000);
-      });
-    }
-
-    // ── Toggle visibility ────────────────────────────────────────────────────
-    function toggleVis(id) {
-      const input = document.getElementById(id);
-      input.type = input.type === 'password' ? 'text' : 'password';
-    }
-
-    // ── Clear all ────────────────────────────────────────────────────────────
-    function clearAll() {
-      if (!confirm('This will delete all API keys, history, and cached data. Continue?')) return;
-      chrome.storage.sync.clear();
-      chrome.storage.local.clear();
-      chrome.storage.session.clear();
-      document.getElementById('key-vt').value       = '';
-      document.getElementById('key-abuseipdb').value = '';
-      document.getElementById('key-shodan').value   = '';
-      alert('All IOCulus data cleared.');
-    }
-
-    // Allow Enter to save
-    document.querySelectorAll('input').forEach(input => {
-      input.addEventListener('keydown', e => { if (e.key === 'Enter') saveKeys(); });
-    });
-  </script>
+  <script src="settings.js"></script>
 </body>
 </html>
