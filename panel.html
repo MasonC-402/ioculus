@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>IOCulus</title>
+  <link rel="stylesheet" href="panel.css" />
+</head>
+<body>
+  <!-- ── Header ── -->
+  <header id="header">
+    <div id="logo">
+      <img src="icons/icon32.png" alt="" />
+      <span>IOCulus</span>
+    </div>
+    <div id="header-actions">
+      <button id="btn-clear" title="Clear results">✕ Clear</button>
+      <button id="btn-settings" title="Settings">⚙</button>
+    </div>
+  </header>
+
+  <!-- ── Quick-analyze bar ── -->
+  <div id="quickbar">
+    <input id="quick-input" type="text" placeholder="Paste IP, domain, URL, hash…" spellcheck="false" />
+    <button id="quick-submit">Analyze</button>
+  </div>
+
+  <!-- ── Tabs ── -->
+  <nav id="tabs">
+    <button class="tab active" data-tab="results">Results</button>
+    <button class="tab" data-tab="iocs">IOC Extractor</button>
+    <button class="tab" data-tab="network">Network</button>
+    <button class="tab" data-tab="history">History</button>
+  </nav>
+
+  <!-- ── Tab: Results ── -->
+  <section id="tab-results" class="tabcontent active">
+    <div id="results-placeholder" class="placeholder">
+      Right-click any selection → IOCulus, or paste an IOC above.
+    </div>
+    <div id="results-container" style="display:none"></div>
+  </section>
+
+  <!-- ── Tab: IOC Extractor ── -->
+  <section id="tab-iocs" class="tabcontent">
+    <div class="toolbar">
+      <button id="btn-extract-page">Extract from Current Page</button>
+      <button id="btn-extract-text" style="margin-left:6px">Extract from Pasted Text</button>
+    </div>
+    <textarea id="ioc-paste-area" placeholder="Paste raw text here, then click 'Extract from Pasted Text'…" style="display:none"></textarea>
+    <div id="ioc-results" class="placeholder">No IOCs extracted yet.</div>
+  </section>
+
+  <!-- ── Tab: Network Inspector ── -->
+  <section id="tab-network" class="tabcontent">
+    <div class="toolbar">
+      <button id="btn-refresh-network">Refresh</button>
+      <label class="toggle-label">
+        <input type="checkbox" id="chk-flagged-only" />
+        Flagged only
+      </label>
+      <span id="network-count" style="margin-left:auto;color:var(--muted)"></span>
+    </div>
+    <div id="network-filter-bar">
+      <input id="net-filter" type="text" placeholder="Filter by URL or type…" />
+    </div>
+    <div id="network-list" class="placeholder">
+      Requests will appear here. Navigate to a page while the panel is open.
+    </div>
+  </section>
+
+  <!-- ── Tab: History ── -->
+  <section id="tab-history" class="tabcontent">
+    <div class="toolbar">
+      <button id="btn-clear-history">Clear History</button>
+      <button id="btn-export-history" style="margin-left:6px">Export JSON</button>
+    </div>
+    <div id="history-list" class="placeholder">No history yet.</div>
+  </section>
+
+  <script src="ioc.js"></script>
+  <script src="panel.js"></script>
+</body>
+</html>

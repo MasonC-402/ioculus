@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>IOCulus — Settings</title>
+  <style>
+    :root {
+      --bg0:    #0d1117;
+      --bg1:    #161b22;
+      --bg2:    #1c2128;
+      --bg3:    #22272e;
+      --border: #30363d;
+      --accent: #00d4ff;
+      --danger: #ff6b6b;
+      --muted:  #6e7681;
+      --text:   #c9d1d9;
+      --texthi: #e6edf3;
+      --green:  #3fb950;
+      --font:   'Consolas', 'Monaco', 'Courier New', monospace;
+      --font-ui: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg0);
+      color: var(--text);
+      font-family: var(--font-ui);
+      font-size: 13px;
+      line-height: 1.6;
+      padding: 0;
+      min-height: 100vh;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 32px;
+      background: var(--bg1);
+      border-bottom: 1px solid var(--border);
+    }
+    header img { width: 28px; height: 28px; }
+    header h1 {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--accent);
+      font-family: var(--font);
+      letter-spacing: .5px;
+    }
+
+    main {
+      max-width: 640px;
+      margin: 32px auto;
+      padding: 0 24px;
+    }
+
+    .section {
+      background: var(--bg1);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      margin-bottom: 24px;
+      overflow: hidden;
+    }
+    .section-header {
+      padding: 12px 18px;
+      background: var(--bg2);
+      border-bottom: 1px solid var(--border);
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .6px;
+      color: var(--muted);
+    }
+    .section-body { padding: 18px; }
+
+    .field { margin-bottom: 18px; }
+    .field:last-child { margin-bottom: 0; }
+
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--texthi);
+      margin-bottom: 5px;
+    }
+    label .badge {
+      display: inline-block;
+      font-size: 9px;
+      padding: 1px 5px;
+      border-radius: 3px;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      color: var(--accent);
+      font-weight: 400;
+      margin-left: 6px;
+      text-transform: uppercase;
+      vertical-align: middle;
+    }
+    .field-desc {
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 7px;
+    }
+    .field-desc a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+    .field-desc a:hover { text-decoration: underline; }
+
+    .key-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    input[type="text"], input[type="password"] {
+      flex: 1;
+      background: var(--bg0);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--texthi);
+      font-family: var(--font);
+      font-size: 12px;
+      padding: 7px 10px;
+      outline: none;
+      transition: border-color .15s;
+    }
+    input:focus { border-color: var(--accent); }
+
+    button {
+      background: var(--bg3);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 7px 14px;
+      font-size: 12px;
+      cursor: pointer;
+      font-family: var(--font-ui);
+      transition: background .15s, border-color .15s;
+      white-space: nowrap;
+    }
+    button:hover { background: var(--bg2); border-color: var(--accent); color: var(--texthi); }
+    button.primary {
+      background: #0d3349;
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+    button.primary:hover { background: #0d4a6e; }
+
+    .toggle-visibility {
+      font-size: 14px;
+      padding: 6px 10px;
+    }
+
+    .save-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 0 0;
+    }
+    .status-msg {
+      font-size: 12px;
+      color: var(--green);
+      display: none;
+    }
+    .status-msg.error { color: var(--danger); }
+
+    .info-box {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 10px 14px;
+      font-size: 11px;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+    .info-box strong { color: var(--text); }
+
+    .danger-zone { border-color: var(--danger); }
+    .danger-zone .section-header { color: var(--danger); border-bottom-color: var(--danger); }
+
+    .sep { height: 1px; background: var(--border); margin: 14px 0; }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="icons/icon32.png" alt="" />
+    <h1>IOCulus — Settings</h1>
+  </header>
+
+  <main>
+    <!-- API Keys -->
+    <div class="section">
+      <div class="section-header">API Keys</div>
+      <div class="section-body">
+
+        <!-- VirusTotal -->
+        <div class="field">
+          <label>VirusTotal API Key <span class="badge">Required</span></label>
+          <div class="field-desc">
+            Get a free key at <a href="https://www.virustotal.com/gui/join-us" target="_blank">virustotal.com</a>.
+            Free tier: 4 req/min, 500/day.
+          </div>
+          <div class="key-row">
+            <input type="password" id="key-vt" placeholder="e.g. a1b2c3d4e5f6..." autocomplete="off" spellcheck="false" />
+            <button class="toggle-visibility" onclick="toggleVis('key-vt')">👁</button>
+          </div>
+        </div>
+
+        <div class="sep"></div>
+
+        <!-- AbuseIPDB -->
+        <div class="field">
+          <label>AbuseIPDB API Key <span class="badge">Required for IP analysis</span></label>
+          <div class="field-desc">
+            Free at <a href="https://www.abuseipdb.com/register" target="_blank">abuseipdb.com</a>.
+            Free tier: 1,000 checks/day.
+          </div>
+          <div class="key-row">
+            <input type="password" id="key-abuseipdb" placeholder="e.g. a1b2c3d4e5f6..." autocomplete="off" spellcheck="false" />
+            <button class="toggle-visibility" onclick="toggleVis('key-abuseipdb')">👁</button>
+          </div>
+        </div>
+
+        <div class="sep"></div>
+
+        <!-- Shodan -->
+        <div class="field">
+          <label>Shodan API Key <span class="badge">Required for port/banner data</span></label>
+          <div class="field-desc">
+            Free at <a href="https://account.shodan.io/register" target="_blank">shodan.io</a>.
+            Free tier allows host lookups (no scanning).
+          </div>
+          <div class="key-row">
+            <input type="password" id="key-shodan" placeholder="e.g. a1b2c3d4e5f6..." autocomplete="off" spellcheck="false" />
+            <button class="toggle-visibility" onclick="toggleVis('key-shodan')">👁</button>
+          </div>
+        </div>
+
+        <div class="save-bar">
+          <button class="primary" onclick="saveKeys()">Save API Keys</button>
+          <span class="status-msg" id="save-status"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- About -->
+    <div class="section">
+      <div class="section-header">About</div>
+      <div class="section-body">
+        <div class="info-box">
+          <strong>IOCulus v1.0.0</strong><br/>
+          A browser extension for cybersecurity analysts. Right-click any selected text (IP, domain, URL, hash, email)
+          to trigger reputation lookups across VirusTotal, AbuseIPDB, and Shodan.<br/><br/>
+          <strong>Free APIs used (no key needed):</strong><br/>
+          • <strong>ip-api.com</strong> — IP geolocation &amp; ASN<br/>
+          • <strong>whoisjson.com / rdap.org</strong> — WHOIS lookups<br/><br/>
+          API keys are stored in <code>chrome.storage.sync</code> and synced across your Chrome profile.
+          They are never sent to any server other than the respective API endpoints.
+        </div>
+      </div>
+    </div>
+
+    <!-- Danger Zone -->
+    <div class="section danger-zone">
+      <div class="section-header">Danger Zone</div>
+      <div class="section-body">
+        <div class="field">
+          <label>Clear All Stored Data</label>
+          <div class="field-desc">Removes API keys, history, and network cache.</div>
+          <button class="danger" onclick="clearAll()">Clear All Data</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // ── Load saved keys ──────────────────────────────────────────────────────
+    chrome.storage.sync.get(['virusTotalKey','abuseIPDBKey','shodanKey'], (data) => {
+      if (data.virusTotalKey) document.getElementById('key-vt').value         = data.virusTotalKey;
+      if (data.abuseIPDBKey)  document.getElementById('key-abuseipdb').value  = data.abuseIPDBKey;
+      if (data.shodanKey)     document.getElementById('key-shodan').value     = data.shodanKey;
+    });
+
+    // ── Save keys ────────────────────────────────────────────────────────────
+    function saveKeys() {
+      const vtKey     = document.getElementById('key-vt').value.trim();
+      const abuseKey  = document.getElementById('key-abuseipdb').value.trim();
+      const shodanKey = document.getElementById('key-shodan').value.trim();
+
+      chrome.storage.sync.set({
+        virusTotalKey: vtKey,
+        abuseIPDBKey:  abuseKey,
+        shodanKey:     shodanKey,
+      }, () => {
+        const msg = document.getElementById('save-status');
+        if (chrome.runtime.lastError) {
+          msg.textContent = '✕ Error: ' + chrome.runtime.lastError.message;
+          msg.className = 'status-msg error';
+        } else {
+          msg.textContent = '✓ Saved';
+          msg.className = 'status-msg';
+        }
+        msg.style.display = 'inline';
+        setTimeout(() => msg.style.display = 'none', 3000);
+      });
+    }
+
+    // ── Toggle visibility ────────────────────────────────────────────────────
+    function toggleVis(id) {
+      const input = document.getElementById(id);
+      input.type = input.type === 'password' ? 'text' : 'password';
+    }
+
+    // ── Clear all ────────────────────────────────────────────────────────────
+    function clearAll() {
+      if (!confirm('This will delete all API keys, history, and cached data. Continue?')) return;
+      chrome.storage.sync.clear();
+      chrome.storage.local.clear();
+      chrome.storage.session.clear();
+      document.getElementById('key-vt').value       = '';
+      document.getElementById('key-abuseipdb').value = '';
+      document.getElementById('key-shodan').value   = '';
+      alert('All IOCulus data cleared.');
+    }
+
+    // Allow Enter to save
+    document.querySelectorAll('input').forEach(input => {
+      input.addEventListener('keydown', e => { if (e.key === 'Enter') saveKeys(); });
+    });
+  </script>
+</body>
+</html>
