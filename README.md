@@ -130,3 +130,9 @@ This is an unpacked extension — just edit files and click **↺ Reload** on th
 - API keys are stored in `chrome.storage.sync` (encrypted by Chrome, synced to your Google account if signed in).
 - Analysis history is stored locally in `chrome.storage.local`.
 - No telemetry, no external servers, no ads.
+
+---
+
+## License
+
+[MIT](LICENSE)
