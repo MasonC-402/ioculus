@@ -430,8 +430,7 @@ chrome.webRequest.onBeforeRequest.addListener(
       chrome.storage.session.set({ [key]: requests });
     });
   },
-  { urls: ['<all_urls>'] },
-  ['requestBody']
+  { urls: ['<all_urls>'] }
 );
 
 function isSuspiciousRequest(details) {

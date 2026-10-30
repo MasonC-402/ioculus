@@ -94,8 +94,7 @@ All analyses are saved locally (last 200). Click any entry to re-run the analysi
 ioculus/
 ├── manifest.json          # MV3 manifest
 ├── background.js          # Service worker: context menus, API calls, network tracking
-├── content.js             # Content script: page text extraction, highlight
-├── content.css            # Content script styles
+├── ioc.js                 # Shared IOC detection, refanging, and extraction
 ├── panel.html             # Side panel markup
 ├── panel.css              # Side panel styles (dark theme)
 ├── panel.js               # Side panel logic: rendering, IOC UI, network UI, history
