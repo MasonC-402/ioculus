@@ -12,7 +12,7 @@ A Chromium (Chrome/Brave) extension for cybersecurity analysts. Context-menu-dri
 2. Enable **Developer mode** (toggle, top-right)
 3. Click **Load unpacked**
 4. Select the `ioculus/` folder
-5. The IOCulus icon appears in your toolbar
+5. The IOCulus icon appears in your toolbar — click it to open or close the side panel (or use the ✕ in the panel header)
 
 ### 2. Configure API Keys
 

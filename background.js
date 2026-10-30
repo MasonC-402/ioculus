@@ -133,8 +133,7 @@ chrome.contextMenus.onClicked.addListener(async (info, tab) => {
 
 async function openPanel(tab) {
   try {
-    await chrome.sidePanel.open({ tabId: tab.id });
-    await chrome.sidePanel.setOptions({ tabId: tab.id, path: 'panel.html', enabled: true });
+    await chrome.sidePanel.open({ windowId: tab.windowId });
   } catch (e) {
     // Side panel may already be open or unsupported
   }
@@ -473,6 +472,5 @@ chrome.tabs.onRemoved.addListener((tabId) => {
 
 // ─── Toolbar Button: Toggle Panel ────────────────────────────────────────────
 
-chrome.action.onClicked.addListener(async (tab) => {
-  await openPanel(tab);
-});
+// Let Chrome handle the toolbar icon so a second click closes the panel again
+chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true }).catch(() => {});

@@ -128,9 +128,22 @@ function initQuickBar() {
   input.addEventListener('keydown', e => { if (e.key === 'Enter') run(); });
 
   document.getElementById('btn-clear').addEventListener('click', clearResults);
+  document.getElementById('btn-close').addEventListener('click', closePanel);
   document.getElementById('btn-settings').addEventListener('click', () => {
     chrome.runtime.openOptionsPage();
   });
+}
+
+async function closePanel() {
+  // chrome.sidePanel.close() exists in Chrome 141+; window.close() works in older versions
+  try {
+    if (chrome.sidePanel?.close) {
+      const win = await chrome.windows.getCurrent();
+      await chrome.sidePanel.close({ windowId: win.id });
+      return;
+    }
+  } catch (_) {}
+  window.close();
 }
 
 // ─── Results Rendering ────────────────────────────────────────────────────────
