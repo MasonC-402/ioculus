@@ -26,7 +26,7 @@ Click the extension icon → **⚙ Settings** (or right-click any page → IOCul
 
 Keys are stored in `chrome.storage.sync` — synced across your Chrome profile, never sent anywhere except the respective API endpoints.
 
-**No key needed:** Geo/ASN uses [ip-api.com](http://ip-api.com) (free, 45 req/min). WHOIS uses [whoisjson.com](https://whoisjson.com) with RDAP fallback.
+**No key needed:** Geo/ASN uses [ip-api.com](http://ip-api.com) (free, 45 req/min). WHOIS uses [RDAP](https://rdap.org) (the registries' official WHOIS replacement).
 
 ---
 
@@ -52,7 +52,7 @@ Each analysis query fires parallel API requests. Results appear in collapsible c
 
 **Domain / URL Analysis:**
 - VirusTotal: detection stats, categories, tags, registrar
-- WHOIS: registrar, creation/expiry dates, nameservers, registrant (RDAP fallback)
+- WHOIS (RDAP): registrar, creation/expiry dates, nameservers, registrant
 
 **Hash Analysis (MD5 / SHA1 / SHA256):**
 - VirusTotal: detection count, file name, type, size, first/last seen, Sigma analysis

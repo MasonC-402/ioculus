@@ -276,29 +276,33 @@ async function geoLookup(ip) {
   }
 }
 
-// ─── API: WHOIS (whoisjson.com, free tier) ────────────────────────────────────
+// ─── API: WHOIS via RDAP (rdap.org bootstrap, free, no key) ──────────────────
 
+/**
+ * Registries only answer for registered domains, so walk up from the full
+ * hostname (www.mail.example.co.uk → mail.example.co.uk → example.co.uk …)
+ * until one resolves.
+ */
 async function whoisLookup(domain) {
-  try {
-    const resp = await fetch(`https://whoisjson.com/api/v1/whois?domain=${encodeURIComponent(domain)}`);
-    if (!resp.ok) {
-      // Fallback to rdap
-      return rdapLookup(domain);
-    }
-    return await resp.json();
-  } catch (e) {
-    return rdapLookup(domain);
-  }
-}
+  const labels = domain.toLowerCase().replace(/\.$/, '').split('.');
+  let lastError = 'RDAP: no record found';
 
-async function rdapLookup(domain) {
-  try {
-    const resp = await fetch(`https://rdap.org/domain/${encodeURIComponent(domain)}`);
-    if (!resp.ok) return { error: `RDAP HTTP ${resp.status}` };
-    return await resp.json();
-  } catch (e) {
-    return { error: `WHOIS/RDAP fetch failed: ${e.message}` };
+  for (let i = 0; i <= labels.length - 2; i++) {
+    const candidate = labels.slice(i).join('.');
+    try {
+      const resp = await fetch(`https://rdap.org/domain/${encodeURIComponent(candidate)}`, {
+        headers: { Accept: 'application/rdap+json, application/json' },
+      });
+      if (resp.ok) return await resp.json();
+      if (resp.status !== 404) {
+        lastError = `RDAP HTTP ${resp.status} for ${candidate}`;
+        if (resp.status === 429) break; // rate limited, more attempts won't help
+      }
+    } catch (e) {
+      return { error: `RDAP fetch failed: ${e.message}` };
+    }
   }
+  return { error: `${lastError} (the TLD's registry may not support RDAP)` };
 }
 
 // ─── Orchestrated Analysis Functions ─────────────────────────────────────────
@@ -352,7 +356,9 @@ async function analyzeDomainOrUrl(value, keys) {
 }
 
 async function analyzeHash(hash, keys) {
-  const vtResult = await vtAnalyzeHash(hash, keys.virusTotalKey);
+  const vtResult = hash.length === 128
+    ? { error: 'VirusTotal only indexes MD5, SHA-1 and SHA-256 hashes, not SHA-512.' }
+    : await vtAnalyzeHash(hash, keys.virusTotalKey);
 
   sendToPanel({
     action: 'analysis-result',

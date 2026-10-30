@@ -187,7 +187,7 @@ function getExpectedSources(type) {
   if (type === 'ipv4' || type === 'ipv6') return ['virustotal','abuseipdb','shodan','geo'];
   if (type === 'domain')                   return ['virustotal','whois'];
   if (type === 'url')                      return ['virustotal','whois'];
-  if (type === 'md5' || type === 'sha1' || type === 'sha256') return ['virustotal'];
+  if (type === 'md5' || type === 'sha1' || type === 'sha256' || type === 'sha512') return ['virustotal'];
   if (type === 'email')                    return ['virustotal','whois'];
   return ['virustotal'];
 }
@@ -498,39 +498,29 @@ function renderWHOIS(data, domain) {
   const frag = document.createDocumentFragment();
   if (data.error) return errorFrag(data.error);
 
-  // Try to extract key fields from various WHOIS API formats
+  // RDAP response; values come from registries, so escape them (kvTable renders HTML)
   const rows = [];
 
-  // whoisjson.com format
-  if (data.domain_name || data.registrar || data.creation_date) {
-    pushRow(rows, 'Domain',     data.domain_name || domain);
-    pushRow(rows, 'Registrar',  data.registrar);
-    pushRow(rows, 'Created',    fmtWhoisDate(data.creation_date));
-    pushRow(rows, 'Updated',    fmtWhoisDate(data.updated_date));
-    pushRow(rows, 'Expires',    fmtWhoisDate(data.expiration_date));
-    pushRow(rows, 'Status',     Array.isArray(data.status) ? data.status.join(', ') : data.status);
-    pushRow(rows, 'Name Servers', Array.isArray(data.name_servers) ? data.name_servers.join(', ') : data.name_servers);
-    pushRow(rows, 'DNSSEC',     data.dnssec);
-  } else if (data.ldhName || data.handle) {
+  if (data.ldhName || data.handle) {
     // RDAP format
-    pushRow(rows, 'Domain',    data.ldhName || domain);
-    pushRow(rows, 'Handle',    data.handle);
+    pushRow(rows, 'Domain',    esc((data.ldhName || domain).toLowerCase()));
+    pushRow(rows, 'Handle',    esc(data.handle));
     if (data.events) {
       data.events.forEach(e => {
-        pushRow(rows, e.eventAction, fmtWhoisDate(e.eventDate));
+        pushRow(rows, esc(e.eventAction), esc(fmtWhoisDate(e.eventDate)));
       });
     }
     if (data.nameservers) {
-      pushRow(rows, 'Name Servers', data.nameservers.map(ns => ns.ldhName).join(', '));
+      pushRow(rows, 'Name Servers', esc(data.nameservers.map(ns => ns.ldhName).join(', ')));
     }
     if (data.status) {
-      pushRow(rows, 'Status', Array.isArray(data.status) ? data.status.join(', ') : data.status);
+      pushRow(rows, 'Status', esc(Array.isArray(data.status) ? data.status.join(', ') : data.status));
     }
     if (data.entities) {
       data.entities.forEach(ent => {
         const roles = (ent.roles || []).join('/');
         const name  = ent.vcardArray?.[1]?.find(v => v[0]==='fn')?.[3] || ent.handle;
-        if (name) pushRow(rows, roles || 'Entity', name);
+        if (name) pushRow(rows, esc(roles || 'Entity'), esc(name));
       });
     }
   }
