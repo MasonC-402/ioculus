@@ -1,137 +1,121 @@
-# IOCulus — Analyst Toolkit
+# IOCulus
 
-A Chromium (Chrome/Brave) extension for cybersecurity analysts. Context-menu-driven reputation lookups, IOC extraction, and network request inspection — no build step, vanilla JS.
+A Chrome/Brave extension for looking up IPs, domains, URLs, and hashes, pulling IOCs out of pages, and watching a tab's network requests. Plain JS, no build step.
 
----
+## Install
 
-## Quick Start
+1. Go to `chrome://extensions`.
+2. Turn on **Developer mode** (top right).
+3. Click **Load unpacked** and pick the `ioculus/` folder.
+4. Click the toolbar icon to open or close the side panel.
 
-### 1. Load the Extension
+To pick up code changes, hit **↺ Reload** on the extensions page.
 
-1. Open Chrome/Brave and navigate to `chrome://extensions`
-2. Enable **Developer mode** (toggle, top-right)
-3. Click **Load unpacked**
-4. Select the `ioculus/` folder
-5. The IOCulus icon appears in your toolbar — click it to open or close the side panel (or use the ✕ in the panel header)
+## API keys
 
-### 2. Configure API Keys
+Open settings with the ⚙ button in the panel, then add your keys:
 
-Click the extension icon → **⚙ Settings** (or right-click any page → IOCulus → Open IOCulus Panel → ⚙), then enter:
+| Service | Sign up | Free tier |
+| ------- | ------- | --------- |
+| VirusTotal | [virustotal.com/gui/join-us](https://www.virustotal.com/gui/join-us) | 4 req/min, 500/day |
+| AbuseIPDB | [abuseipdb.com/register](https://www.abuseipdb.com/register) | 1,000 checks/day |
+| Shodan | [account.shodan.io/register](https://account.shodan.io/register) | Host lookups only, no scanning |
 
-| Key | Where to get it | Free tier |
-|-----|----------------|-----------|
-| **VirusTotal** | [virustotal.com/gui/join-us](https://www.virustotal.com/gui/join-us) | 4 req/min, 500/day |
-| **AbuseIPDB** | [abuseipdb.com/register](https://www.abuseipdb.com/register) | 1,000 checks/day |
-| **Shodan** | [account.shodan.io/register](https://account.shodan.io/register) | Host lookups (no scanning) |
+Keys live in `chrome.storage.sync` and only go to their own API.
 
-Keys are stored in `chrome.storage.sync` — synced across your Chrome profile, never sent anywhere except the respective API endpoints.
-
-**No key needed:** Geo/ASN uses [ip-api.com](http://ip-api.com) (free, 45 req/min). WHOIS uses [RDAP](https://rdap.org) (the registries' official WHOIS replacement).
-
----
+Geo/ASN ([ip-api.com](http://ip-api.com), 45 req/min) and WHOIS ([RDAP](https://rdap.org)) don't need a key.
 
 ## Features
 
-### Context Menu Analysis
-Right-click any selected text → **IOCulus** → choose an option:
+### Right-click menu
 
-- **Analyze Selection (Auto-detect)** — auto-detects type (IP, domain, URL, hash, email) and runs all relevant lookups
-- **Analyze as IP / Domain / Hash** — force a specific type
-- **Analyze Link URL** — right-click any hyperlink to analyze its destination
-- **Extract IOCs from Page** — scans the current page for all IOCs
-- **Network Request Inspector** — opens the captured request log
+Select some text, right-click, and go to **IOCulus**:
 
-### Side Panel — Results Tab
-Each analysis query fires parallel API requests. Results appear in collapsible cards:
+- **Analyze Selection (Auto-detect)** figures out whether it's an IP, domain, URL, hash, or email and runs the lookups that apply.
+- **Analyze as IP / Domain / Hash** forces a type.
+- **Analyze Link URL** (right-click a link) checks where the link goes.
+- **Extract IOCs from Page** scans the current page.
+- **Network Request Inspector** opens the request log.
 
-**IP Analysis:**
-- VirusTotal: detection count, gauge, engine list, reputation, ASN
-- AbuseIPDB: confidence score, total reports, categories, last report date, TOR flag
-- Shodan: open ports, service banners, OS, vulnerabilities (CVEs), ASN
+### Results
+
+Lookups run in parallel, and each source gets its own collapsible card.
+
+IPs:
+
+- VirusTotal: detections, engine list, reputation, ASN
+- AbuseIPDB: confidence score, report count, categories, last reported, TOR flag
+- Shodan: open ports, banners, OS, CVEs, ASN
 - Geo/ASN: country, city, ISP, ASN, map link
 
-**Domain / URL Analysis:**
+Domains and URLs:
+
 - VirusTotal: detection stats, categories, tags, registrar
-- WHOIS (RDAP): registrar, creation/expiry dates, nameservers, registrant
+- WHOIS (RDAP): registrar, created/expires, nameservers, registrant
 
-**Hash Analysis (MD5 / SHA1 / SHA256):**
-- VirusTotal: detection count, file name, type, size, first/last seen, Sigma analysis
+Hashes (MD5, SHA1, SHA256, SHA512):
 
-### Quick-Analyze Bar
-Paste any IOC directly into the bar at the top of the panel and press Enter or click **Analyze**.
+- VirusTotal: detections, file name, type, size, first/last seen, Sigma results
 
-### IOC Extractor
-Scans the current page automatically whenever the IOC Extractor tab is open (re-scans on tab switch and page load), or paste raw text. Defanged IOCs (`hxxp://`, `evil[.]com`, `1.2.3[.]4`, `user[@]host`) are refanged first. Extracts:
-- IPv4 (private/reserved excluded) and IPv6 addresses
-- Domains (from text and from URLs in text)
+You can also paste anything into the bar at the top of the panel and hit Enter.
+
+### IOC extractor
+
+While this tab is open, it scans the current page and rescans when you switch tabs or a page loads. You can also paste raw text. Defanged values like `hxxp://`, `evil[.]com`, `1.2.3[.]4`, and `user[@]host` get refanged first.
+
+It picks up:
+
+- IPv4 (skips private/reserved) and IPv6
+- Domains, from the text and from URLs in it
 - URLs
-- File hashes (MD5, SHA1, SHA256, SHA512)
-- Email addresses (including `mailto:` links)
-- CVE identifiers
-- **Page links** — every `<a href>` on the page (all frames), external links first
-- **Page resources** — scripts, iframes, form actions, `<link>`s, embeds, media, meta-refresh targets
+- MD5, SHA1, SHA256, and SHA512 hashes
+- Emails, including `mailto:` links
+- CVE IDs
+- Page links: every `<a href>` in every frame, with external links first
+- Page resources: scripts, iframes, form actions, `<link>` tags, embeds, media, and meta-refresh targets
 
-Click **Analyze** next to any item to run lookups immediately, **Copy all** per section, or export everything as JSON.
+Each item has an Analyze button. Each section has Copy all, and you can export everything as JSON.
 
-### Network Request Inspector
-Captures all requests made by the current tab (up to 500). Features:
-- Filter by URL or request type
-- "Flagged only" toggle — highlights suspicious requests:
-  - Executable file downloads (`.exe`, `.ps1`, `.dll`, etc.)
-  - Raw IP hosts
-  - Cross-origin XHR
-  - Paste sites, tunnel services, `.onion` addresses
-- Click any request to analyze its URL
+### Network inspector
+
+Logs up to 500 requests from the current tab. You can filter by URL or type, or turn on "Flagged only" to show requests that look off:
+
+- Executable downloads (`.exe`, `.ps1`, `.dll`, etc.)
+- Hosts that are raw IPs
+- Cross-origin XHR
+- Paste sites, tunnel services, and `.onion`
+
+Click a request to analyze its URL.
 
 ### History
-All analyses are saved locally (last 200). Click any entry to re-run the analysis. Export full history as JSON.
 
----
+The last 200 lookups are saved locally. Click one to run it again, or export the whole history as JSON.
 
-## File Structure
+## Files
 
-```
+```text
 ioculus/
-├── manifest.json          # MV3 manifest
-├── background.js          # Service worker: context menus, API calls, network tracking
-├── ioc.js                 # Shared IOC detection, refanging, and extraction
-├── panel.html             # Side panel markup
-├── panel.css              # Side panel styles (dark theme)
-├── panel.js               # Side panel logic: rendering, IOC UI, network UI, history
-├── settings.html          # Options page: API key management
-├── settings.js            # Options page logic
+├── manifest.json     MV3 manifest
+├── background.js     Service worker: context menus, API calls, network tracking
+├── ioc.js            IOC detection, refanging, extraction (shared)
+├── panel.html        Side panel markup
+├── panel.css         Side panel styles
+├── panel.js          Side panel logic
+├── settings.html     Settings page
+├── settings.js       Settings page logic
 └── icons/
-    ├── icon16.png
-    ├── icon32.png
-    ├── icon48.png
-    └── icon128.png
 ```
 
----
+## Rate limits
 
-## API Rate Limits & Tips
-
-- **VirusTotal free:** 4 requests/minute. IP, domain, and URL each cost 1 request. Analyzing an IP fires 1 VT request + 1 AbuseIPDB + 1 Shodan + 1 Geo = 4 total across 4 different APIs, so you won't hit VT limits on typical use.
-- **AbuseIPDB:** 1,000/day free. Each IP lookup is 1 request.
-- **Shodan free:** Host lookups are available. Scanning is not.
-- **ip-api.com:** 45 requests/minute per IP, no key needed.
-
----
-
-## Updating
-
-This is an unpacked extension — just edit files and click **↺ Reload** on the `chrome://extensions` page. No build step required.
-
----
+- VirusTotal: 4 req/min on the free tier. An IP lookup makes one VT call (plus one each to AbuseIPDB, Shodan, and ip-api), so normal use stays under the limit.
+- AbuseIPDB: 1,000/day, one per IP lookup.
+- Shodan: host lookups work on the free tier. Scanning doesn't.
+- ip-api.com: 45/min per IP.
 
 ## Privacy
 
-- All API calls go directly from your browser to the respective API endpoints.
-- API keys are stored in `chrome.storage.sync` (encrypted by Chrome, synced to your Google account if signed in).
-- Analysis history is stored locally in `chrome.storage.local`.
-- No telemetry, no external servers, no ads.
-
----
+Requests go straight from your browser to each API. Keys are in `chrome.storage.sync`, which syncs to your Google account if you're signed in. History stays in `chrome.storage.local`. Nothing gets sent anywhere else.
 
 ## License
 

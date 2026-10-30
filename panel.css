@@ -1,6 +1,4 @@
-/* ═══════════════════════════════════════════════════════
-   IOCulus Panel — Dark Power-User Theme
-   ═══════════════════════════════════════════════════════ */
+/* Side panel styles */
 
 :root {
   --bg0:     #0d1117;
@@ -37,13 +35,13 @@ html, body {
   line-height: 1.5;
 }
 
-/* ── Scrollbars ── */
+/* Scrollbars */
 ::-webkit-scrollbar            { width: var(--scroll); height: var(--scroll); }
 ::-webkit-scrollbar-track      { background: var(--bg1); }
 ::-webkit-scrollbar-thumb      { background: var(--border); border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover{ background: var(--muted); }
 
-/* ── Header ── */
+/* Header */
 #header {
   display: flex;
   align-items: center;
@@ -67,7 +65,7 @@ html, body {
 
 #header-actions { display: flex; gap: 6px; }
 
-/* ── Buttons ── */
+/* Buttons */
 button {
   background: var(--bg3);
   color: var(--text);
@@ -85,7 +83,7 @@ button.primary:hover { background: #0d4a6e; }
 button.danger   { border-color: var(--danger); color: var(--danger); }
 button.danger:hover  { background: #2d1a1a; }
 
-/* ── Quick-analyze bar ── */
+/* Quick-analyze bar */
 #quickbar {
   display: flex;
   gap: 6px;
@@ -108,7 +106,7 @@ button.danger:hover  { background: #2d1a1a; }
 #quick-input:focus { border-color: var(--accent); }
 #quick-submit { white-space: nowrap; }
 
-/* ── Tabs ── */
+/* Tabs */
 #tabs {
   display: flex;
   background: var(--bg1);
@@ -130,7 +128,7 @@ button.danger:hover  { background: #2d1a1a; }
 .tab:hover  { color: var(--text); background: transparent; border-color: transparent; }
 .tab.active { color: var(--accent); border-bottom-color: var(--accent); background: transparent; }
 
-/* ── Tab content ── */
+/* Tab content */
 .tabcontent {
   display: none;
   flex-direction: column;
@@ -145,7 +143,7 @@ body {
   height: 100vh;
 }
 
-/* ── Toolbar ── */
+/* Toolbar */
 .toolbar {
   display: flex;
   align-items: center;
@@ -166,7 +164,7 @@ body {
 }
 .toggle-label:hover { color: var(--text); }
 
-/* ── Placeholder ── */
+/* Placeholder */
 .placeholder {
   padding: 20px;
   color: var(--muted);
@@ -174,14 +172,14 @@ body {
   line-height: 1.8;
 }
 
-/* ── Scrollable pane ── */
+/* Scrollable pane */
 .scroll-pane {
   flex: 1;
   overflow-y: auto;
   padding: 10px;
 }
 
-/* ── IOC Paste Area ── */
+/* IOC Paste Area */
 #ioc-paste-area {
   width: 100%;
   height: 100px;
@@ -204,7 +202,7 @@ body {
   padding: 10px;
 }
 
-/* ── Network filter ── */
+/* Network filter */
 #network-filter-bar {
   padding: 5px 10px;
   border-bottom: 1px solid var(--border);
@@ -230,14 +228,14 @@ body {
   padding: 0;
 }
 
-/* ── Results container ── */
+/* Results container */
 #results-container {
   flex: 1;
   overflow-y: auto;
   padding: 10px;
 }
 
-/* ── Section Cards ── */
+/* Section Cards */
 .result-card {
   background: var(--bg1);
   border: 1px solid var(--border);
@@ -279,7 +277,7 @@ body {
 .result-card-body { padding: 10px; }
 .result-card-body.collapsed { display: none; }
 
-/* ── Verdict badge ── */
+/* Verdict badge */
 .verdict {
   display: inline-block;
   font-size: 10px;
@@ -295,7 +293,7 @@ body {
 .verdict-unknown { background: var(--bg3); color: var(--muted);   border: 1px solid var(--border); }
 .verdict-error   { background: var(--bg3); color: var(--danger);  border: 1px solid var(--danger); }
 
-/* ── KV table ── */
+/* KV table */
 .kv-table { width: 100%; border-collapse: collapse; font-size: 11px; }
 .kv-table td { padding: 3px 6px; vertical-align: top; }
 .kv-table td:first-child {
@@ -313,7 +311,7 @@ body {
 }
 .kv-table tr:hover td { background: var(--bg2); }
 
-/* ── VT gauge bar ── */
+/* VT gauge bar */
 .vt-gauge {
   margin-top: 8px;
   margin-bottom: 4px;
@@ -331,7 +329,7 @@ body {
 }
 .vt-gauge-label { font-size: 10px; color: var(--muted); margin-top: 3px; }
 
-/* ── VT engine list ── */
+/* VT engine list */
 .vt-engine-list { margin-top: 8px; }
 .vt-engine-row {
   display: flex;
@@ -348,7 +346,7 @@ body {
 .vt-engine-result.clean    { color: var(--muted); }
 .vt-engine-result.timeout  { color: var(--warn); }
 
-/* ── Tags ── */
+/* Tags */
 .tag-list { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 5px; }
 .tag {
   display: inline-block;
@@ -364,7 +362,7 @@ body {
 .tag.warn { border-color: var(--warn);      color: var(--warn); }
 .tag.info { border-color: var(--accent);    color: var(--accent); }
 
-/* ── Ports list ── */
+/* Ports list */
 .port-list { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 5px; }
 .port-chip {
   font-family: var(--font);
@@ -378,7 +376,7 @@ body {
 }
 .port-chip:hover { border-color: var(--accent); background: #0d2a38; }
 
-/* ── Banner list (Shodan services) ── */
+/* Banner list (Shodan services) */
 .banner-entry {
   background: var(--bg0);
   border: 1px solid var(--border);
@@ -392,7 +390,7 @@ body {
 .banner-port { color: var(--accent); font-weight: bold; margin-bottom: 3px; }
 .banner-data { white-space: pre-wrap; word-break: break-all; color: var(--muted); max-height: 120px; overflow-y: auto; }
 
-/* ── IOC extractor output ── */
+/* IOC extractor output */
 .ioc-section { margin-bottom: 12px; }
 .ioc-section-title {
   font-size: 10px;
@@ -456,7 +454,7 @@ body {
   white-space: nowrap;
 }
 
-/* ── Network list ── */
+/* Network list */
 .net-row {
   display: flex;
   flex-direction: column;
@@ -519,7 +517,7 @@ body {
 }
 .net-flag-reason { color: var(--warn); font-size: 10px; margin-top: 2px; }
 
-/* ── History ── */
+/* History */
 #history-list {
   flex: 1;
   overflow-y: auto;
@@ -559,7 +557,7 @@ body {
 }
 .history-time { font-size: 10px; color: var(--muted); flex-shrink: 0; }
 
-/* ── Loading spinner ── */
+/* Loading spinner */
 .spinner {
   display: inline-block;
   width: 12px;
@@ -573,7 +571,7 @@ body {
 }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-/* ── Analysis header ── */
+/* Analysis header */
 .analysis-header {
   display: flex;
   align-items: center;
@@ -604,7 +602,7 @@ body {
   flex-shrink: 0;
 }
 
-/* ── Copy button ── */
+/* Copy button */
 .copy-btn {
   font-size: 9px;
   padding: 1px 5px;
@@ -612,7 +610,7 @@ body {
 }
 .copy-btn:hover { opacity: 1; }
 
-/* ── Empty / error states ── */
+/* Empty / error states */
 .error-msg {
   color: var(--danger);
   font-size: 11px;
@@ -632,7 +630,7 @@ body {
   margin-top: 4px;
 }
 
-/* ── WHOIS block ── */
+/* WHOIS block */
 .whois-raw {
   font-family: var(--font);
   font-size: 10px;
@@ -647,7 +645,7 @@ body {
   padding: 8px;
 }
 
-/* ── Map link ── */
+/* Map link */
 .map-link {
   color: var(--accent);
   text-decoration: none;
@@ -655,10 +653,10 @@ body {
 }
 .map-link:hover { text-decoration: underline; }
 
-/* ── VT categories / tags ── */
+/* VT categories / tags */
 .vt-categories { margin-top: 6px; }
 
-/* ── Responsive tweaks for narrow panel ── */
+/* Responsive tweaks for narrow panel */
 @media (max-width: 360px) {
   .kv-table td:first-child { width: 90px; }
 }

@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="panel.css" />
 </head>
 <body>
-  <!-- ── Header ── -->
+  <!-- Header -->
   <header id="header">
     <div id="logo">
       <img src="icons/icon32.png" alt="" />
@@ -20,13 +20,13 @@
     </div>
   </header>
 
-  <!-- ── Quick-analyze bar ── -->
+  <!-- Quick-analyze bar -->
   <div id="quickbar">
     <input id="quick-input" type="text" placeholder="Paste IP, domain, URL, hash…" spellcheck="false" />
     <button id="quick-submit">Analyze</button>
   </div>
 
-  <!-- ── Tabs ── -->
+  <!-- Tabs -->
   <nav id="tabs">
     <button class="tab active" data-tab="results">Results</button>
     <button class="tab" data-tab="iocs">IOC Extractor</button>
@@ -34,7 +34,7 @@
     <button class="tab" data-tab="history">History</button>
   </nav>
 
-  <!-- ── Tab: Results ── -->
+  <!-- Tab: Results -->
   <section id="tab-results" class="tabcontent active">
     <div id="results-placeholder" class="placeholder">
       Right-click any selection → IOCulus, or paste an IOC above.
@@ -42,7 +42,7 @@
     <div id="results-container" style="display:none"></div>
   </section>
 
-  <!-- ── Tab: IOC Extractor ── -->
+  <!-- Tab: IOC Extractor -->
   <section id="tab-iocs" class="tabcontent">
     <div class="toolbar">
       <button id="btn-extract-page">Extract from Current Page</button>
@@ -52,7 +52,7 @@
     <div id="ioc-results" class="placeholder">No IOCs extracted yet.</div>
   </section>
 
-  <!-- ── Tab: Network Inspector ── -->
+  <!-- Tab: Network Inspector -->
   <section id="tab-network" class="tabcontent">
     <div class="toolbar">
       <button id="btn-refresh-network">Refresh</button>
@@ -70,7 +70,7 @@
     </div>
   </section>
 
-  <!-- ── Tab: History ── -->
+  <!-- Tab: History -->
   <section id="tab-history" class="tabcontent">
     <div class="toolbar">
       <button id="btn-clear-history">Clear History</button>

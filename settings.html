@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>IOCulus — Settings</title>
+  <title>IOCulus Settings</title>
   <style>
     :root {
       --bg0:    #0d1117;
@@ -185,7 +185,7 @@
 <body>
   <header>
     <img src="icons/icon32.png" alt="" />
-    <h1>IOCulus — Settings</h1>
+    <h1>IOCulus Settings</h1>
   </header>
 
   <main>
@@ -250,13 +250,10 @@
       <div class="section-body">
         <div class="info-box">
           <strong>IOCulus v1.0.0</strong><br/>
-          A browser extension for cybersecurity analysts. Right-click any selected text (IP, domain, URL, hash, email)
-          to trigger reputation lookups across VirusTotal, AbuseIPDB, and Shodan.<br/><br/>
-          <strong>Free APIs used (no key needed):</strong><br/>
-          • <strong>ip-api.com</strong> — IP geolocation &amp; ASN<br/>
-          • <strong>whoisjson.com / rdap.org</strong> — WHOIS lookups<br/><br/>
-          API keys are stored in <code>chrome.storage.sync</code> and synced across your Chrome profile.
-          They are never sent to any server other than the respective API endpoints.
+          Select an IP, domain, URL, hash, or email, right-click, and IOCulus checks it against
+          VirusTotal, AbuseIPDB, and Shodan.<br/><br/>
+          No key needed for geo/ASN (ip-api.com) or WHOIS (rdap.org).<br/><br/>
+          Keys are saved in <code>chrome.storage.sync</code> and only sent to their own API.
         </div>
       </div>
     </div>
