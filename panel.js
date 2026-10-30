@@ -1,11 +1,8 @@
-/**
- * IOCulus — Side Panel JS
- * Renders analysis results, IOC extractor, network inspector, and history.
- */
+// Side panel: results, IOC extractor, network inspector, history.
 
 'use strict';
 
-// ─── State ────────────────────────────────────────────────────────────────────
+// State
 
 const state = {
   currentTab:       'results',
@@ -19,7 +16,7 @@ const state = {
   iocExtracting:    false,
 };
 
-// ─── Init ────────────────────────────────────────────────────────────────────
+// Init
 
 document.addEventListener('DOMContentLoaded', () => {
   initTabs();
@@ -67,7 +64,7 @@ chrome.tabs.onUpdated.addListener((tabId, info, tab) => {
   if (state.currentTab === 'iocs') extractFromPage(true);
 });
 
-// ─── Message listener (from background) ──────────────────────────────────────
+// Message listener (from background)
 
 chrome.runtime.onMessage.addListener((msg) => {
   if (msg.target && msg.target !== 'panel') return;
@@ -93,7 +90,7 @@ chrome.runtime.onMessage.addListener((msg) => {
   }
 });
 
-// ─── Tab Navigation ───────────────────────────────────────────────────────────
+// Tab Navigation
 
 function initTabs() {
   document.querySelectorAll('.tab').forEach(btn => {
@@ -111,7 +108,7 @@ function switchTab(name) {
   if (name === 'history') renderHistory();
 }
 
-// ─── Quick-analyze bar ────────────────────────────────────────────────────────
+// Quick-analyze bar
 
 function initQuickBar() {
   const input = document.getElementById('quick-input');
@@ -146,7 +143,7 @@ async function closePanel() {
   window.close();
 }
 
-// ─── Results Rendering ────────────────────────────────────────────────────────
+// Results Rendering
 
 function clearResults() {
   document.getElementById('results-container').innerHTML = '';
@@ -230,7 +227,7 @@ function renderSource(src, data, type, value, domain) {
   }
 }
 
-// ── VirusTotal renderer ────────────────────────────────────────────────────
+// VirusTotal renderer
 
 function renderVT(data, type) {
   const frag = document.createDocumentFragment();
@@ -334,7 +331,7 @@ function renderVT(data, type) {
   return frag;
 }
 
-// ── AbuseIPDB renderer ────────────────────────────────────────────────────
+// AbuseIPDB renderer
 
 function renderAbuseIPDB(data) {
   const frag = document.createDocumentFragment();
@@ -387,7 +384,7 @@ function renderAbuseIPDB(data) {
   return frag;
 }
 
-// ── Shodan renderer ────────────────────────────────────────────────────────
+// Shodan renderer
 
 function renderShodan(data) {
   const frag = document.createDocumentFragment();
@@ -464,7 +461,7 @@ function renderShodan(data) {
   return frag;
 }
 
-// ── Geo/ASN renderer ───────────────────────────────────────────────────────
+// Geo/ASN renderer
 
 function renderGeo(data) {
   const frag = document.createDocumentFragment();
@@ -492,7 +489,7 @@ function renderGeo(data) {
   return frag;
 }
 
-// ── WHOIS renderer ─────────────────────────────────────────────────────────
+// WHOIS renderer
 
 function renderWHOIS(data, domain) {
   const frag = document.createDocumentFragment();
@@ -543,7 +540,7 @@ function fmtWhoisDate(d) {
   try { return new Date(d).toLocaleString(); } catch(_) { return d; }
 }
 
-// ─── Analysis error helper ────────────────────────────────────────────────────
+// Analysis error helper
 
 function showAnalysisError(message) {
   const container = document.getElementById('results-container');
@@ -555,7 +552,7 @@ function showAnalysisError(message) {
   }
 }
 
-// ─── IOC Extractor ───────────────────────────────────────────────────────────
+// IOC Extractor
 
 function initIOCExtractor() {
   document.getElementById('btn-extract-page').addEventListener('click', extractFromPage);
@@ -759,7 +756,7 @@ function renderIOCs(iocs, sourceUrl) {
   container.appendChild(exportBar);
 }
 
-// ─── Network Inspector ────────────────────────────────────────────────────────
+// Network Inspector
 
 function initNetworkInspector() {
   document.getElementById('btn-refresh-network').addEventListener('click', refreshNetwork);
@@ -860,7 +857,7 @@ function renderNetworkList() {
   container.appendChild(frag);
 }
 
-// ─── History ─────────────────────────────────────────────────────────────────
+// History
 
 function initHistory() {
   document.getElementById('btn-clear-history').addEventListener('click', () => {
@@ -933,7 +930,7 @@ function renderHistory() {
   container.appendChild(frag);
 }
 
-// ─── DOM helpers ─────────────────────────────────────────────────────────────
+// DOM helpers
 
 function el(tag, cls) {
   const e = document.createElement(tag);

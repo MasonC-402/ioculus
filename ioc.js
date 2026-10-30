@@ -1,7 +1,5 @@
-/**
- * IOCulus — Shared IOC detection / extraction.
- * Loaded by background.js (importScripts) and panel.html (<script>).
- */
+// IOC detection and extraction, shared by background.js (importScripts)
+// and panel.html (<script>).
 
 'use strict';
 

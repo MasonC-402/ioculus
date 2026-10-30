@@ -1,11 +1,8 @@
-/**
- * IOCulus — Background Service Worker
- * Handles context menus, API orchestration, and message routing.
- */
+// Background service worker: context menus, API calls, message routing.
 
 importScripts('ioc.js'); // PATTERNS, refang, extractIOCs, detectType, isPrivateIP
 
-// ─── Context Menu Setup ───────────────────────────────────────────────────────
+// Context Menu Setup
 
 function buildMenus() {
   chrome.contextMenus.removeAll(() => {
@@ -95,7 +92,7 @@ function buildMenus() {
 chrome.runtime.onInstalled.addListener(buildMenus);
 chrome.runtime.onStartup.addListener(buildMenus);
 
-// ─── Context Menu Click Handler ───────────────────────────────────────────────
+// Context Menu Click Handler
 
 chrome.contextMenus.onClicked.addListener(async (info, tab) => {
   // Ensure side panel is open
@@ -129,7 +126,7 @@ chrome.contextMenus.onClicked.addListener(async (info, tab) => {
   await dispatchAnalysis(value, type);
 });
 
-// ─── Panel Communication ──────────────────────────────────────────────────────
+// Panel Communication
 
 async function openPanel(tab) {
   try {
@@ -151,7 +148,7 @@ function queuePanelAction(msg) {
   sendToPanel(msg);
 }
 
-// ─── Analysis Dispatcher ──────────────────────────────────────────────────────
+// Analysis Dispatcher
 
 async function dispatchAnalysis(value, type) {
   value = refang(String(value).trim());
@@ -175,7 +172,7 @@ async function dispatchAnalysis(value, type) {
   }
 }
 
-// ─── API Key Helper ───────────────────────────────────────────────────────────
+// API Key Helper
 
 async function getApiKeys() {
   return new Promise(resolve => {
@@ -183,7 +180,7 @@ async function getApiKeys() {
   });
 }
 
-// ─── API: VirusTotal ──────────────────────────────────────────────────────────
+// API: VirusTotal
 
 async function vtRequest(endpoint, apiKey) {
   if (!apiKey) return { error: 'VirusTotal API key not configured. Go to Settings.' };
@@ -232,7 +229,7 @@ async function vtAnalyzeHash(hash, apiKey) {
   return vtRequest(`files/${encodeURIComponent(hash)}`, apiKey);
 }
 
-// ─── API: AbuseIPDB ───────────────────────────────────────────────────────────
+// API: AbuseIPDB
 
 async function abuseIPDBLookup(ip, apiKey) {
   if (!apiKey) return { error: 'AbuseIPDB API key not configured. Go to Settings.' };
@@ -248,7 +245,7 @@ async function abuseIPDBLookup(ip, apiKey) {
   }
 }
 
-// ─── API: Shodan ──────────────────────────────────────────────────────────────
+// API: Shodan
 
 async function shodanLookup(ip, apiKey) {
   if (!apiKey) return { error: 'Shodan API key not configured. Go to Settings.' };
@@ -264,7 +261,7 @@ async function shodanLookup(ip, apiKey) {
   }
 }
 
-// ─── API: Geo/ASN (ip-api.com, free, no key needed) ──────────────────────────
+// API: Geo/ASN (ip-api.com, free, no key needed)
 
 async function geoLookup(ip) {
   try {
@@ -276,7 +273,7 @@ async function geoLookup(ip) {
   }
 }
 
-// ─── API: WHOIS via RDAP (rdap.org bootstrap, free, no key) ──────────────────
+// API: WHOIS via RDAP (rdap.org bootstrap, free, no key)
 
 /**
  * Registries only answer for registered domains, so walk up from the full
@@ -305,7 +302,7 @@ async function whoisLookup(domain) {
   return { error: `${lastError} (the TLD's registry may not support RDAP)` };
 }
 
-// ─── Orchestrated Analysis Functions ─────────────────────────────────────────
+// Orchestrated Analysis Functions
 
 async function analyzeIP(ip, keys) {
   // Fire all requests in parallel
@@ -370,7 +367,7 @@ async function analyzeHash(hash, keys) {
   });
 }
 
-// ─── Message Router ───────────────────────────────────────────────────────────
+// Message Router
 
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   if (msg.action === 'analyze') {
@@ -410,7 +407,7 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   return false;
 });
 
-// ─── Network Request Tracking ─────────────────────────────────────────────────
+// Network Request Tracking
 
 const MAX_REQUESTS_PER_TAB = 500;
 
@@ -475,7 +472,7 @@ chrome.tabs.onRemoved.addListener((tabId) => {
   chrome.storage.session.remove([`net_${tabId}`]);
 });
 
-// ─── Toolbar Button: Toggle Panel ────────────────────────────────────────────
+// Toolbar Button: Toggle Panel
 
 // Let Chrome handle the toolbar icon so a second click closes the panel again
 chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true }).catch(() => {});
